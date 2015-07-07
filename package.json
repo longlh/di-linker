@@ -1,0 +1,21 @@
+{
+  "name": "linker",
+  "version": "0.0.1",
+  "description": "DependencyInjector Container for NodeJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "di",
+    "dependency",
+    "injector"
+  ],
+  "author": "d@dapps.me",
+  "license": "MIT",
+  "dependencies": {
+    "args-list": "0.3.3",
+    "bluebird": "2.9.32",
+    "glob": "5.0.13"
+  }
+}
