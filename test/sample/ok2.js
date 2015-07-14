@@ -1,7 +1,7 @@
 exports._ = '/sample/module2';
-exports._injects = [
+exports._requires = [
 	'@events'
 ];
-exports._constructor = function(events) {
+exports._factory = function(events) {
 	return events;
 };

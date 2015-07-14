@@ -1,7 +1,7 @@
 exports._ = '/sample/module1';
-exports._injects = [
+exports._requires = [
 	'/sample/module2'
 ];
-exports._constructor = function(file2) {
+exports._factory = function(file2) {
 	return file2;
 };

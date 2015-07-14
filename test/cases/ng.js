@@ -24,4 +24,12 @@ describe('Linker', function() {
 			done();
 		});
 	});
+
+	it('should return error when module dupplicate', function(done) {
+		lib('test/sample/dupplicate/*.js').on('error', function(err) {
+			err.should.be.Error();
+
+			done();
+		});
+	});
 });

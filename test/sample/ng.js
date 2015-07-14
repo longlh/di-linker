@@ -1,7 +1,7 @@
 exports._ = '/main';
-exports._injects = [
+exports._requires = [
 	'/lib'
 ];
-exports._constructor = function(lib) {
+exports._factory = function(lib) {
 	return lib;
 };
