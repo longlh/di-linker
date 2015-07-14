@@ -12,7 +12,7 @@
   },
   "homepage": "https://github.com/longlh/linker",
   "scripts": {
-    "test": "\"./node_modules/.bin/mocha\" ./test/cases"
+    "test": "./node_modules/.bin/_mocha ./test/cases"
   },
   "keywords": [
     "di",
