@@ -2,20 +2,37 @@
   "name": "linker",
   "version": "0.0.1",
   "description": "DependencyInjector Container for NodeJS",
-  "main": "index.js",
+  "main": "./lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/longlh/linker"
+  },
+  "bugs": {
+    "url": "https://github.com/longlh/linker/issues"
+  },
+  "homepage": "https://github.com/longlh/linker",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "\"./node_modules/.bin/mocha\" ./test/cases"
   },
   "keywords": [
     "di",
     "dependency",
     "injector"
   ],
-  "author": "d@dapps.me",
+  "author": {
+    "name": "Luc Hoang Long",
+    "email": "d@dapps.me"
+  },
   "license": "MIT",
   "dependencies": {
-    "args-list": "0.3.3",
     "bluebird": "2.9.32",
     "glob": "5.0.13"
+  },
+  "devDependencies": {
+    "blanket": "1.1.7",
+    "coveralls": "2.11.2",
+    "mocha": "2.2.5",
+    "mocha-lcov-reporter": "0.0.2",
+    "should": "7.0.2"
   }
 }
