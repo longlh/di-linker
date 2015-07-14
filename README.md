@@ -1,2 +1,2 @@
 # linker
-Dependency Injection Framework for NodeJS
+Simple DI for NodeJS
