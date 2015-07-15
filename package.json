@@ -1,7 +1,7 @@
 {
-  "name": "linker",
+  "name": "di-linker",
   "version": "0.0.1",
-  "description": "DependencyInjector Container for NodeJS",
+  "description": "Lightweight Dependency Injection Framework for NodeJS",
   "main": "./lib/index.js",
   "repository": {
     "type": "git",
