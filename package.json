@@ -1,16 +1,16 @@
 {
   "name": "di-linker",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Lightweight Dependency Injection Framework for NodeJS",
   "main": "./lib/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/longlh/linker"
+    "url": "https://github.com/longlh/di-linker"
   },
   "bugs": {
-    "url": "https://github.com/longlh/linker/issues"
+    "url": "https://github.com/longlh/di-linker/issues"
   },
-  "homepage": "https://github.com/longlh/linker",
+  "homepage": "https://github.com/longlh/di-linker",
   "scripts": {
     "test": "./node_modules/.bin/_mocha ./test/cases"
   },
