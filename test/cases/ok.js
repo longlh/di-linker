@@ -22,9 +22,11 @@ describe('Linker', function() {
 	it('can require other NodeJS packages', function(done) {
 		var linker = lib('test/sample/*.js', require);
 
-		(linker.get('@events')).should.be.exactly(require('events'));
+		linker.get('@events').then(function(events) {
+			events.should.be.exactly(require('events'));
 
-		done();
+			done();
+		});
 	});
 
 	it('should wire modules correctly', function(done) {
@@ -37,9 +39,12 @@ describe('Linker', function() {
 
 	it('should cache modules correctly', function(done) {
 		var linker = lib('test/sample/*.js', require).bootstrap('/sample/module1', function(err, main) {
-			(main).should.be.exactly(linker.get('/sample/module1'));
 
-			done();
+			linker.get('/sample/module1').then(function(module1) {
+				(main).should.be.exactly(module1);
+
+				done();
+			});
 		});
 	});
 });
