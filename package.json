@@ -1,6 +1,6 @@
 {
   "name": "di-linker",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Lightweight Dependency Injection Framework for NodeJS",
   "main": "./lib/index.js",
   "repository": {
