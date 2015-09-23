@@ -2,7 +2,7 @@ require('../setup/blanket');
 var should = require('should');
 
 describe('Linker', function() {
-	var lib = require('../../lib');
+	var lib = require('../../node/main');
 
 	it('should be required well', function(done) {
 		('function').should.be.exactly(typeof lib);

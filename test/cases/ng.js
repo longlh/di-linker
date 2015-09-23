@@ -2,7 +2,7 @@ require('../setup/blanket');
 var should = require('should');
 
 describe('Linker', function() {
-	var lib = require('../../lib');
+	var lib = require('../../node/main');
 
 	it('should throw error when invalid pattern', function(done) {
 		lib().on('error', function(err) {

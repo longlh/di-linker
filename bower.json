@@ -1,0 +1,28 @@
+{
+  "name": "di-linker",
+  "version": "1.2.0",
+  "homepage": "https://github.com/longlh/di-linker",
+  "authors": [
+    "Luc Hoang Long <d@dapps.me>"
+  ],
+  "description": "A lightweight Dependency Injection",
+  "main": "./browser/dist/di-linker.js",
+  "moduleType": [
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "di",
+    "dependency",
+    "injection",
+    "ioc"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
