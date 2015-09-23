@@ -21,7 +21,7 @@ var Context = function() {
 
 	// register built-in dependency
 	this.register('@promise', Promise);
-	this.regsiter('@lodash', _);
+	this.register('@lodash', _);
 };
 
 var proto = Context.prototype;
@@ -110,7 +110,7 @@ proto.bootstrap = function() {
 
 var contexts = {};
 
-exports.__ = function(name) {
+module.exports = function(name) {
 	if (!contexts[name]) {
 		contexts[name] = new Context();
 	}

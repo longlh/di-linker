@@ -1,15 +1,14 @@
 {
   "name": "di-linker",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "homepage": "https://github.com/longlh/di-linker",
   "authors": [
     "Luc Hoang Long <d@dapps.me>"
   ],
   "description": "A lightweight Dependency Injection",
-  "main": "./browser/dist/di-linker.js",
+  "main": "./browser/dist/di-linker.standalone.min.js",
   "moduleType": [
-    "globals",
-    "node"
+    "globals"
   ],
   "keywords": [
     "di",
@@ -19,10 +18,15 @@
   ],
   "license": "MIT",
   "ignore": [
-    "**/.*",
+    "brower/source",
+    "node",
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "Gruntfile.js",
+    "package.json",
+    "README.md",
+    ".travis.yml"
   ]
 }

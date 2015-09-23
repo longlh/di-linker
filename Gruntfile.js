@@ -10,12 +10,23 @@ module.exports = function(grunt) {
 				files: {
 					'browser/dist/di-linker.js': 'browser/source/main.js'
 				}
+			},
+			standalone: {
+				options: {
+					browserifyOptions: {
+						standalone: '__'
+					}
+				},
+				files: {
+					'browser/dist/di-linker.standalone.js': 'browser/source/main.js'
+				}
 			}
 		},
 		uglify: {
 			dist: {
 				files: {
-					'browser/dist/di-linker.min.js': 'browser/dist/di-linker.js'
+					'browser/dist/di-linker.min.js': 'browser/dist/di-linker.js',
+					'browser/dist/di-linker.standalone.min.js': 'browser/dist/di-linker.standalone.js'
 				}
 			}
 		}
