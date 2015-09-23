@@ -1,6 +1,6 @@
 {
   "name": "di-linker",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "homepage": "https://github.com/longlh/di-linker",
   "authors": [
     "Luc Hoang Long <d@dapps.me>"
@@ -18,7 +18,7 @@
   ],
   "license": "MIT",
   "ignore": [
-    "brower/source",
+    "browser/source",
     "node",
     "node_modules",
     "bower_components",
