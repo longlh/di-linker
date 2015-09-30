@@ -1,4 +1,4 @@
-DI-Linker 2.0.0
+DI-Linker 2.0.1
 ======
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][npm-url]

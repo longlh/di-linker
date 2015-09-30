@@ -40,7 +40,7 @@ var Context = module.exports = function(requireFunc) {
 
 	// register some build-in dependencies
 	this.value('#injector', this._injector);
-	this.register('#require', this._require);
+	this.value('#require', this._require);
 };
 
 var proto = Context.prototype;
