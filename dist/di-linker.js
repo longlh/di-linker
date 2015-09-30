@@ -92,7 +92,7 @@ proto.resolve = function(name) {
 		return BPromise.reject(new Error('Invalid dependency name'));
 	}
 
-	if (this._requireIndicator && name.startsWith(this._requireIndicator)) {
+	if (this._requireIndicator && this._requireIndicator === name[0]) {
 		return BPromise.resolve(this._require(name.substr(1)));
 	}
 
