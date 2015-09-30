@@ -21,6 +21,8 @@ module.exports = function(name) {
 	return store[name];
 };
 
+module.exports.Context = Context;
+
 },{"./context":2,"bluebird":5,"lodash":7}],2:[function(require,module,exports){
 'use strict';
 

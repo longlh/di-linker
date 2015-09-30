@@ -19,3 +19,5 @@ module.exports = function(name) {
 
 	return store[name];
 };
+
+module.exports.Context = Context;
