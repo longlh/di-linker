@@ -5,7 +5,7 @@ DI-Linker
 [![Build Status][travis-image]][travis-url]
 [![Coverage Status][coveralls-image]][coveralls-url]
 
-`di-linker` is a lightweight Dependency Injection Framework for NodeJS.  
+`di-linker` is a lightweight Dependency Injection for Javascript.
 It provides some main features:
 - No more hard-coded dependencies
 - No more confusing `require` statement
@@ -62,9 +62,9 @@ That is all, now you can run your application:
 node ./index.js
 ```
 #### Define modules
-`exports._`: Define module name.  
-`exports._requires`: Define the module's dependencies. Note that `@` prefix means requiring Node packages.  
-`exports._factory`: Define a function as factory for the module. Module's dependencies are injected as parameters of this function.  
+`exports._`: Define module name.
+`exports._requires`: Define the module's dependencies. Note that `@` prefix means requiring Node packages.
+`exports._factory`: Define a function as factory for the module. Module's dependencies are injected as parameters of this function.
 
 ### Tests
 ```bash

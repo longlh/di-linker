@@ -1,125 +1,172 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.__ = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
 var _ = require('lodash');
-var Promise = require('bluebird');
+var BPromise = require('bluebird');
+var Context = require('./context');
+var store = {};
 
-var Dependency = function(args) {
-	if (_.isArray(args)) {
-		// factory type
-		this.factory = args.pop();
-		this.requires = args;
-	} else {
-		// value type
-		this.value = args;
+module.exports = function(name) {
+	if (!store[name]) {
+		var context = store[name] = new Context();
+
+		// disable require
+		context._requireIndicator = undefined;
+
+		// add two built-in libraries
+		context.value('@lodash', _);
+		context.value('@bluebird', BPromise);
 	}
+
+	return store[name];
 };
 
-var Context = function() {
-	this.container = {};
-	this.cache = {};
-	this.autoload = [];
+},{"./context":2,"bluebird":5,"lodash":7}],2:[function(require,module,exports){
+'use strict';
 
-	// register built-in dependency
-	this.register('@promise', Promise);
-	this.register('@lodash', _);
+var _ = require('lodash');
+var BPromise = require('bluebird');
+
+var Injector = require('./injector');
+var Dependency = require('./dependency');
+
+var Context = module.exports = function(requireFunc) {
+	this._injector = new Injector(this);
+	this._require = requireFunc || require;
+	this._container = {};
+	this._requireIndicator = '@';
+
+	// register some build-in dependencies
+	this.value('#injector', this._injector);
+	this.register('#require', this._require);
 };
 
 var proto = Context.prototype;
 
-proto.register = function(name, args, autoload) {
-	if (this.container[name]) {
-		throw new Error('Dependency [' + name + '] has been registered!');
+proto.register = function(def) {
+	var dependency = new Dependency(def);
+
+	if (this._container[dependency.name]) {
+		throw new Error('Dependency [' + dependency.name + '] has been registered!');
 	}
 
-	this.container[name] = new Dependency(args);
-
-	if (autoload) {
-		this.autoload.push(name);
-	}
+	// store dependency
+	this._container[dependency.name] = dependency;
 
 	return this;
 };
 
-proto.resolve = function(name) {
-	// look at cache
-	var cached = this.cache[name];
+proto.value = function(name, value) {
+	return this.register({
+		name: name,
+		value: value
+	});
+};
 
-	if (cached) {
-		if (cached.value) {
-			return Promise.resolve(cached.value);
-		}
-
-		return cached.promise;
+proto.factory = function(name, def) {
+	if (!_.isArray(def)) {
+		throw new Error('Invalid factory format');
 	}
 
-	// look at container
-	var dependency = this.container[name];
+	return this.register({
+		name: name,
+		factory: def.pop(),
+		requires: def
+	});
+};
 
-	if (!dependency) {
-		throw new Error('Dependency [' + name + '] is not registered yet!');
-	}
-
+proto.bootstrap = function(dependencies) {
 	var self = this;
 
-	cached = this.cache[name] = {};
-
-	// value type
-	if (dependency.value) {
-		cached.value = dependency.value;
-		cached.promise = Promise.resolve(cached.value);
-
-		return cached.promise;
-	}
-
-	// factory
-	var requires = [];
-	var resolve = function(requires, promise, name) {
+	return _.reduce(dependencies, function(promise, name) {
 		return promise.then(function() {
 			return self.resolve(name);
-		}).then(function(module) {
-			requires.push(module);
-
-			return module;
 		});
-	};
-
-	cached.promise = _.reduce(dependency.requires, function(promise, name) {
-		// resolve require and push to requires array
-		return resolve(requires, promise, name);
-	}, Promise.resolve()).then(function() {
-		return dependency.factory.apply(self, requires);
-	}).then(function(module) {
-		cached.value = module;
-
-		return module;
-	}).catch().finally(function() {
-		// clear pointers
-		requires.length = 0;
-		requires = undefined;
-		self = undefined;
+	}, BPromise.resolve()).then(function() {
+		return self;
 	});
-
-	return cached.promise;
 };
 
-proto.bootstrap = function() {
-	_.forEach(this.autoload, function(name) {
-		this.resolve(name);
-	}, this);
-};
-
-var contexts = {};
-
-module.exports = function(name) {
-	if (!contexts[name]) {
-		contexts[name] = new Context();
+proto.resolve = function(name) {
+	if (!name) {
+		return BPromise.reject(new Error('Invalid dependency name'));
 	}
 
-	return contexts[name];
+	if (this._requireIndicator && name.startsWith(this._requireIndicator)) {
+		return BPromise.resolve(this._require(name.substr(1)));
+	}
+
+	return this._injector.get(name);
 };
 
-},{"bluebird":2,"lodash":4}],2:[function(require,module,exports){
+},{"./dependency":3,"./injector":4,"bluebird":5,"lodash":7}],3:[function(require,module,exports){
+'use strict';
+
+var _ = require('lodash');
+
+function doNothing() {}
+
+module.exports = function(def) {
+	this.name = def.name;
+
+	if (def.value) {
+		this.value = def.value;
+	} else {
+		this.requires = _.isArray(def.requires) ? def.requires : [];
+		this.activations = _.isArray(def.activations) ? def.activations : [];
+		this.factory = _.isFunction(def.factory) ? def.factory : doNothing;
+	}
+};
+
+},{"lodash":7}],4:[function(require,module,exports){
+'use strict';
+
+var _ = require('lodash');
+var BPromise = require('bluebird');
+
+var Injector = module.exports = function(context) {
+	this._context = context;
+};
+
+var proto = Injector.prototype;
+
+proto.get = function(name) {
+	var dependency = this._context._container[name];
+
+	if (!dependency) {
+		throw new Error('Dependency [' + name + '] is not registered!');
+	}
+
+	// if resolved already
+	if (dependency.value) {
+		return BPromise.resolve(dependency.value);
+	}
+
+	// if during resolving
+	if (dependency.promise) {
+		return dependency.promise;
+	}
+
+	// collect requires
+	var requires = _.map(dependency.requires, function(name) {
+		return this.resolve(name);
+	}, this._context);
+
+	dependency.promise = BPromise.all(requires).then(function(requires) {
+		dependency.value = dependency.factory.apply(null, requires);
+
+		return dependency.value;
+	});
+
+	// activate any declared activations then return resolved dependency value
+	return _.reduce(dependency.activations, function(promise, name) {
+		return promise.then(this.resolve.bind(this, name));
+	}, BPromise.resolve(), this._context).then(function() {
+		return dependency.promise;
+	});
+};
+
+},{"bluebird":5,"lodash":7}],5:[function(require,module,exports){
 (function (process,global){
 /* @preserve
  * The MIT License (MIT)
@@ -4926,7 +4973,7 @@ module.exports = ret;
 },{"./es5.js":14}]},{},[4])(4)
 });                    ;if (typeof window !== 'undefined' && window !== null) {                               window.P = window.Promise;                                                     } else if (typeof self !== 'undefined' && self !== null) {                             self.P = self.Promise;                                                         }
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":3}],3:[function(require,module,exports){
+},{"_process":6}],6:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -5019,7 +5066,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],4:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 (function (global){
 /**
  * @license
@@ -17374,4 +17421,5 @@ process.umask = function() { return 0; };
 }.call(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}]},{},[1]);
+},{}]},{},[1])(1)
+});

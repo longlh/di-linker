@@ -1,11 +1,11 @@
 {
   "name": "di-linker",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "homepage": "https://github.com/longlh/di-linker",
   "authors": [
     "Luc Hoang Long <d@dapps.me>"
   ],
-  "description": "A lightweight Dependency Injection",
+  "description": "A lightweight Dependency Injection for Javascript",
   "main": "./browser/dist/di-linker.standalone.min.js",
   "moduleType": [
     "globals"
@@ -18,12 +18,9 @@
   ],
   "license": "MIT",
   "ignore": [
-    "browser/source",
-    "node",
+    "core",
     "node_modules",
-    "bower_components",
     "test",
-    "tests",
     "Gruntfile.js",
     "package.json",
     "README.md",
