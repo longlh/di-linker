@@ -1,4 +1,4 @@
-DI-Linker 2.0.1
+DI-Linker 2.1.0
 ======
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][npm-url]
@@ -28,7 +28,7 @@ var sources = [
   'app/**/*.js'
 ];
 
-di(sources, require).then(function(context) {
+di.walk(sources, require).then(function(context) {
   return context.bootstrap(['/main']); // entry point
 }).catch(console.error.bind(console))
 ```
@@ -127,9 +127,17 @@ Server-side:
 var di = require('di-linker');
 
 // scan code folder and return a context instance via promise
-di(patterns).then(function(context) {
+di.walk(patterns).then(function(context) {
 
 });
+
+// another way
+var newContext = di('context_name');
+var sameContext = di('context_name');
+var anotherConctext = di('another_context_name');
+
+console.log(newContext === sameContext);      // true
+console.log(newContext === anotherContext);   // false
 
 // another way
 var context = new di.Context();
@@ -140,8 +148,10 @@ Client-side:
 // get a context instance via global function `__`
 var newContext = __('context_name');
 var sameContext = __('context_name');
+var anotherConctext = __('another_context_name');
 
-console.log(newContext === sameContext) // true
+console.log(newContext === sameContext);      // true
+console.log(newContext === anotherContext);   // false
 
 // another way
 var context = new __.Context();

@@ -5,6 +5,7 @@ var glob = require('glob');
 var path = require('path');
 var BPromise = require('bluebird');
 var Context = require('./context');
+var store = {};
 
 function walk(pattern) {
 	var defer = BPromise.defer();
@@ -20,7 +21,15 @@ function walk(pattern) {
 	return defer.promise;
 }
 
-module.exports = function(patterns, requireFunc) {
+module.exports = function(name) {
+	if (!store[name]) {
+		var context = store[name] = new Context();
+	}
+
+	return store[name];
+};
+
+module.exports.walk = function(patterns, requireFunc) {
 	requireFunc = requireFunc || require;
 
 	if (typeof patterns === 'string') {

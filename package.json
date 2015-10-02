@@ -1,6 +1,6 @@
 {
   "name": "di-linker",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "A lightweight Dependency Injection for Javascript",
   "main": "./core/node-factory.js",
   "repository": {
@@ -25,8 +25,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "bluebird": "2.9.32",
-    "glob": "5.0.13",
+    "bluebird": "2.10.2",
+    "glob": "5.0.15",
     "lodash": "3.10.1"
   },
   "devDependencies": {
