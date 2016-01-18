@@ -1,6 +1,6 @@
 {
   "name": "di-linker",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "A lightweight Dependency Injection for Javascript",
   "main": "./core/node-factory.js",
   "repository": {
