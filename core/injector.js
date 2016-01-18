@@ -29,7 +29,7 @@ proto.get = function(name) {
 	// collect requires
 	var requires = _.map(dependency.requires, function(name) {
 		return this.resolve(name);
-	}, this._context);
+	}.bind(this._context));
 
 	dependency.promise = BPromise.all(requires).then(function(requires) {
 		dependency.value = dependency.factory.apply(null, requires);
@@ -40,7 +40,7 @@ proto.get = function(name) {
 	// activate any declared activations then return resolved dependency value
 	return _.reduce(dependency.activations, function(promise, name) {
 		return promise.then(this.resolve.bind(this, name));
-	}, BPromise.resolve(), this._context).then(function() {
+	}.bind(this._context), BPromise.resolve()).then(function() {
 		return dependency.promise;
 	});
 };

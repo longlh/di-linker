@@ -3,57 +3,33 @@
 module.exports = function(grunt) {
 	grunt.initConfig({
 		clean: {
-			dist: 'dist/**'
+			dist: 'dist/**',
 		},
 		browserify: {
 			dist: {
 				files: {
-					'dist/di-linker.js': 'core/browser-factory.js'
-				}
+					'dist/di-linker.js': 'core/browser-factory.js',
+				},
 			},
 			standalone: {
 				options: {
 					browserifyOptions: {
-						standalone: '__'
-					}
+						standalone: '__',
+					},
 				},
 				files: {
-					'dist/di-linker.standalone.js': 'core/browser-factory.js'
-				}
-			}
+					'dist/di-linker.standalone.js': 'core/browser-factory.js',
+				},
+			},
 		},
 		uglify: {
 			dist: {
 				files: {
 					'dist/di-linker.min.js': 'dist/di-linker.js',
-					'dist/di-linker.standalone.min.js': 'dist/di-linker.standalone.js'
-				}
-			}
-		},
-		jscs: {
-			options: {
-				config: '.grunt/.jscsrc'
-			},
-			core: {
-				src: [
-					'core/**/*.js'
-				]
-			}
-		},
-		jshint: {
-			core: {
-				options: {
-					jshintrc: '.grunt/.jshintrc'
+					'dist/di-linker.standalone.min.js': 'dist/di-linker.standalone.js',
 				},
-				src: '<%= jscs.core.src %>'
-			}
+			},
 		},
-		watch: {
-			core: {
-				files: '<%= jscs.core.src %>',
-				tasks: ['jscs', 'jshint']
-			}
-		}
 	});
 
 	require('load-grunt-tasks')(grunt);
@@ -61,12 +37,10 @@ module.exports = function(grunt) {
 	grunt.registerTask('build', [
 		'clean',
 		'browserify',
-		'uglify'
+		'uglify',
 	]);
 
 	grunt.registerTask('default', [
-		'jscs',
-		'jshint',
-		'watch'
+		'build',
 	]);
 };

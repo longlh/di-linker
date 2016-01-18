@@ -35,7 +35,7 @@ proto.register = function(def) {
 proto.value = function(name, value) {
 	return this.register({
 		name: name,
-		value: value
+		value: value,
 	});
 };
 
@@ -47,7 +47,7 @@ proto.factory = function(name, def) {
 	return this.register({
 		name: name,
 		factory: def.pop(),
-		requires: def
+		requires: def,
 	});
 };
 
