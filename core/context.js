@@ -11,6 +11,9 @@ var Context = module.exports = function(requireFunc) {
 	this._require = requireFunc || require;
 	this._container = {};
 	this._requireIndicator = '@';
+	this._config = {
+		verboseLog: false
+	};
 
 	// register some build-in dependencies
 	this.value('#injector', this._injector);
@@ -18,6 +21,16 @@ var Context = module.exports = function(requireFunc) {
 };
 
 var proto = Context.prototype;
+
+proto.config = function(config) {
+	this._config = _
+		.chain(config)
+		.pick(['verboseLog'])
+		.defaults(this._config)
+		.value();
+
+	return this;
+};
 
 proto.register = function(def) {
 	var dependency = new Dependency(def);
@@ -35,7 +48,7 @@ proto.register = function(def) {
 proto.value = function(name, value) {
 	return this.register({
 		name: name,
-		value: value,
+		value: value
 	});
 };
 
@@ -47,7 +60,7 @@ proto.factory = function(name, def) {
 	return this.register({
 		name: name,
 		factory: def.pop(),
-		requires: def,
+		requires: def
 	});
 };
 
@@ -68,9 +81,25 @@ proto.resolve = function(name) {
 		return BPromise.reject(new Error('Invalid dependency name'));
 	}
 
-	if (this._requireIndicator && this._requireIndicator === name[0]) {
-		return BPromise.resolve(this._require(name.substr(1)));
+	var verboseLog = !!(this._config && this._config.verboseLog);
+
+	if (verboseLog) {
+		console.log('[di-linker] >> Resolving [' + name + ']');
 	}
 
-	return this._injector.get(name);
+	var promise;
+
+	if (this._requireIndicator && this._requireIndicator === name[0]) {
+		promise = BPromise.resolve(this._require(name.substr(1)));
+	} else {
+		promise = this._injector.get(name);
+	}
+
+	if (verboseLog) {
+		promise.finally(function() {
+			console.log('[di-linker] >> Resolved [' + name + ']');
+		});
+	}
+
+	return promise;
 };

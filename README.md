@@ -192,6 +192,10 @@ Sugar method of `context.register()` for factory-type dependency, width `name`, 
 
 Execute some modules that registered already in the context
 
+### context.config(preferences)
+* `preferences` {Object} Key-value map of the preferenences. Currently, only `verboseLog` {Boolean} is supported.
+* return: current context
+
 # Tests
 ```bash
 $ npm install
