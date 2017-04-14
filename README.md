@@ -193,7 +193,9 @@ Sugar method of `context.register()` for factory-type dependency, width `name`, 
 Execute some modules that registered already in the context
 
 ### context.config(preferences)
-* `preferences` {Object} Key-value map of the preferenences. Currently, only `verboseLog` {Boolean} is supported.
+* `preferences` {Object} Key-value map of the preferences
+  * `verboseLog` {Boolean} Enable verbose log for resolving and resolved states
+  * `allowReRegister` {Boolean} Allow to re-register existing module. **Only use this option for mocking dependencies in testing**
 * return: current context
 
 # Tests
