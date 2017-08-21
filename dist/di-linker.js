@@ -38,7 +38,8 @@ var Context = module.exports = function(requireFunc) {
 	this._container = {};
 	this._requireIndicator = '@';
 	this._config = {
-		verboseLog: false
+		verboseLog: false,
+		allowReRegister: false
 	};
 
 	// register some build-in dependencies
@@ -51,7 +52,10 @@ var proto = Context.prototype;
 proto.config = function(config) {
 	this._config = _
 		.chain(config)
-		.pick(['verboseLog'])
+		.pick([
+			'verboseLog',
+			'allowReRegister'
+		])
 		.defaults(this._config)
 		.value();
 
@@ -60,8 +64,9 @@ proto.config = function(config) {
 
 proto.register = function(def) {
 	var dependency = new Dependency(def);
+	var allowReRegister = !!(this._config && this._config.allowReRegister);
 
-	if (this._container[dependency.name]) {
+	if (!allowReRegister && this._container[dependency.name]) {
 		throw new Error('Dependency [' + dependency.name + '] has been registered!');
 	}
 
@@ -23078,6 +23083,10 @@ process.off = noop;
 process.removeListener = noop;
 process.removeAllListeners = noop;
 process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
 
 process.binding = function (name) {
     throw new Error('process.binding is not supported');
