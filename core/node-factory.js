@@ -8,17 +8,15 @@ var Context = require('./context');
 var store = {};
 
 function walk(pattern) {
-	var defer = BPromise.defer();
+	return new BPromise(function(resolve, reject) {
+		glob(pattern, function(error, paths) {
+			if (error) {
+				return reject(error);
+			}
 
-	glob(pattern, function(error, paths) {
-		if (error) {
-			return defer.reject(error);
-		}
-
-		defer.resolve(paths);
+			resolve(paths);
+		});
 	});
-
-	return defer.promise;
 }
 
 module.exports = function(name) {
